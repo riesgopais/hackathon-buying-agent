@@ -39,8 +39,12 @@ def evaluate_aesthetic(title: str, description: str, image_url: str = "") -> dic
         messages=messages,
     )
 
-    import json
+    import json, re
     try:
-        return json.loads(response.content[0].text)
+        text = response.content[0].text.strip()
+        # Strip markdown code block if present
+        text = re.sub(r"^```(?:json)?\s*", "", text)
+        text = re.sub(r"\s*```$", "", text)
+        return json.loads(text)
     except Exception:
         return {"match": False, "confidence": 0.0, "reason": "Parse error"}
