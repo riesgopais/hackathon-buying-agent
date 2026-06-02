@@ -3,6 +3,26 @@
 Agentic Commerce Build Day — Microsoft Garage × Tavily × Coinbase  
 NYTechWeek 2026
 
+---
+
+## About this project
+
+Built at the **Agentic Commerce: Build Day** hosted by Microsoft, Tavily, and Coinbase at Microsoft Garage in New York City (June 2, 2026).
+
+This project is a fully autonomous buying agent for art. Given a visual style — in this case, Van Gogh's aesthetic — the agent searches the web for matching artworks, evaluates each one using AI vision, and completes the purchase on its own using the **x402 payment protocol** (USDC on Base). No human clicks required.
+
+The core idea: AI agents today can search and reason, but they can't pay. x402 closes that gap by giving agents a native payment layer at the HTTP level. This project demonstrates what end-to-end agentic commerce looks like when search, reasoning, and payments are fully connected.
+
+**How it works:**
+1. Tavily searches the web for Van Gogh-style art listings in real time
+2. Claude (vision-enabled) evaluates each result for aesthetic match
+3. Matched items under $0.01 are purchased instantly via x402/USDC
+4. Higher-priced matches trigger an email to the designer with approve/reject links
+
+**Stack:** Tavily · Anthropic Claude · x402 · Coinbase · Python
+
+---
+
 ## What it does
 
 Searches online art listings for Van Gogh aesthetic matches and autonomously purchases items under $0.01 via x402/USDC — or emails the designer for approval on higher-priced items.
