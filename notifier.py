@@ -6,22 +6,29 @@ from email.mime.multipart import MIMEMultipart
 def _send(subject: str, body: str) -> None:
     smtp_host = os.environ.get("SMTP_HOST", "smtp.gmail.com")
     smtp_port = int(os.environ.get("SMTP_PORT", 587))
-    smtp_user = os.environ["SMTP_USER"]
-    smtp_password = os.environ["SMTP_PASSWORD"]
-    designer_email = os.environ["DESIGNER_EMAIL"]
+    smtp_user = os.environ.get("SMTP_USER", "")
+    smtp_password = os.environ.get("SMTP_PASSWORD", "")
+    designer_email = os.environ.get("DESIGNER_EMAIL", "")
 
-    msg = MIMEMultipart("alternative")
-    msg["Subject"] = subject
-    msg["From"] = smtp_user
-    msg["To"] = designer_email
-    msg.attach(MIMEText(body, "html"))
+    if not smtp_password or smtp_password == "your_app_password":
+        print(f"[notifier] EMAIL SKIPPED (no SMTP config) — {subject}")
+        return
 
-    with smtplib.SMTP(smtp_host, smtp_port) as server:
-        server.starttls()
-        server.login(smtp_user, smtp_password)
-        server.sendmail(smtp_user, designer_email, msg.as_string())
+    try:
+        msg = MIMEMultipart("alternative")
+        msg["Subject"] = subject
+        msg["From"] = smtp_user
+        msg["To"] = designer_email
+        msg.attach(MIMEText(body, "html"))
 
-    print(f"[notifier] Email sent to {designer_email} — {subject}")
+        with smtplib.SMTP(smtp_host, smtp_port) as server:
+            server.starttls()
+            server.login(smtp_user, smtp_password)
+            server.sendmail(smtp_user, designer_email, msg.as_string())
+
+        print(f"[notifier] Email sent to {designer_email} — {subject}")
+    except Exception as e:
+        print(f"[notifier] Email failed ({e}) — {subject}")
 
 
 def notify_purchase_confirmed(listing: dict, evaluation: dict, result: dict) -> None:

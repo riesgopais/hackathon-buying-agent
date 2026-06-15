@@ -70,7 +70,7 @@ def _demo_payment(payment_details: dict) -> str:
     })
 
 
-def _onchain_payment(payment_details: dict) -> str | None:
+def _onchain_payment(payment_details: dict):
     """Send real USDC payment via Coinbase CDP (production)."""
     try:
         from cdp import Cdp, Wallet
